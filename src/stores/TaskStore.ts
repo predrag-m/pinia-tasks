@@ -1,13 +1,17 @@
 import { defineStore } from "pinia";
+import type Task from "@/types/Task";
 
-/// defineStore takes 2 arguments (name, object)
-/// defineStore returns a function that we are storing inside 'useTaskStore'
-/// inside the 'state' we can add multiple properties (not just 'tasks' property)
+type State = {
+  tasks: Task[];
+};
+
 export const useTaskStore = defineStore("taskStore", {
-  state: () => ({
-    tasks: [
-      { id: 1, title: "buy some milk", isFav: false },
-      { id: 2, title: "play Gloomhaven", isFav: true },
-    ],
-  }),
+  state: (): State => {
+    return {
+      tasks: [
+        { id: 1, title: "buy some milk", isFav: false },
+        { id: 2, title: "play Gloomhaven", isFav: true },
+      ],
+    };
+  },
 });
