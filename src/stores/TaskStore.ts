@@ -10,7 +10,8 @@ export const useTaskStore = defineStore("taskStore", {
     return {
       tasks: [
         { id: 1, title: "buy some milk", isFav: false },
-        { id: 2, title: "play Gloomhaven", isFav: true },
+        { id: 2, title: "buy dog food", isFav: false },
+        { id: 3, title: "play Gloomhaven", isFav: true },
       ],
     };
   },
@@ -30,8 +31,13 @@ export const useTaskStore = defineStore("taskStore", {
       this.tasks.push(task);
     },
 
-    deleteTask() {},
+    deleteTask(id: number) {
+      this.tasks = this.tasks.filter((t) => t.id !== id);
+    },
 
-    changeTaskToFavTask() {},
+    toggleFavTask(id: number) {
+      const task: Task | undefined = this.tasks.find((t) => t.id === id);
+      if (task) task.isFav = !task.isFav;
+    },
   },
 });

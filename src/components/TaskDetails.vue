@@ -1,13 +1,15 @@
 <script setup lang="ts">
+import { useTaskStore } from "@/stores/TaskStore";
 import type { Task } from "@/types/Task";
 import { defineProps, type PropType } from "vue";
 
-const props = defineProps({
+defineProps({
   task: {
     required: true,
     type: Object as PropType<Task>,
   },
 });
+const taskStore = useTaskStore();
 </script>
 
 <template>
@@ -16,10 +18,21 @@ const props = defineProps({
     <!-- Inside index.html we created a linked to material icons -->
     <!-- Icon for trash can is 'delete' -->
     <div class="icons">
-      <i class="material-icons">delete</i>
-      <i class="material-icons">favorite</i>
+      <i @click="taskStore.deleteTask(task.id)" class="material-icons"
+        >delete</i
+      >
+      <i
+        @click="taskStore.toggleFavTask(task.id)"
+        class="material-icons"
+        :class="{ active: task.isFav }"
+        >favorite</i
+      >
     </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.red {
+  color: red;
+}
+</style>
