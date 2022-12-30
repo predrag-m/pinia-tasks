@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type Task from "@/types/Task";
+import type { Task } from "@/types/Task";
 
 type State = {
   tasks: Task[];
@@ -14,18 +14,24 @@ export const useTaskStore = defineStore("taskStore", {
       ],
     };
   },
+
   getters: {
-    favs: (state: State): Task[] => {
-      return state.tasks.filter((task: Task) => task.isFav);
+    favTasks: (state: State): Task[] =>
+      state.tasks.filter((task) => task.isFav),
+
+    favTasksCount: (state: State) =>
+      state.tasks.reduce((num, task) => (task.isFav ? num + 1 : num), 0),
+
+    allTasksCount: (state: State) => state.tasks.length,
+  },
+
+  actions: {
+    addTask(task: Task) {
+      this.tasks.push(task);
     },
-    // finish type notation for arguments
-    favCount: (state: State): number => {
-      return state.tasks.reduce((accumulator: number, currentValue: Task) => {
-        return currentValue.isFav ? accumulator + 1 : accumulator;
-      }, 0);
-    },
-    totalCount: (state: State): number => {
-      return state.tasks.length;
-    },
+
+    deleteTask() {},
+
+    changeTaskToFavTask() {},
   },
 });

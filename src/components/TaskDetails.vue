@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type Task from "@/types/Task";
+import type { Task } from "@/types/Task";
 import { defineProps, type PropType } from "vue";
 
 const props = defineProps({

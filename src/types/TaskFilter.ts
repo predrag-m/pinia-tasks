@@ -1,3 +1,1 @@
-type TaskFilter = "all" | "fav";
-
-export default TaskFilter;
+export type TaskFilter = "all" | "fav";
