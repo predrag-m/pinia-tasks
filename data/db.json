@@ -1,24 +1,39 @@
 {
-    "tasks": [
-        {
-            "id": 1,
-            "isFav": false,
-            "title": "buy some milk"
-        },
-        {
-            "id": 2,
-            "isFav": false,
-            "title": "buy dog food"
-        },
-        {
-            "id": 3,
-            "isFav": true,
-            "title": "play Gloomhaven"
-        },
-        {
-            "id": 4,
-            "isFav": false,
-            "title": "do the dishes"
-        }
-    ]
+  "tasks": [
+    {
+      "id": 1,
+      "isFav": true,
+      "title": "buy some milk"
+    },
+    {
+      "id": 2,
+      "isFav": true,
+      "title": "buy dog food"
+    },
+    {
+      "id": 3,
+      "isFav": false,
+      "title": "play Gloomhaven"
+    },
+    {
+      "id": 4,
+      "isFav": false,
+      "title": "mow the lawn"
+    },
+    {
+      "id": 5,
+      "isFav": false,
+      "title": "do the dishes"
+    },
+    {
+      "id": 6,
+      "isFav": false,
+      "title": "play with Cezar"
+    },
+    {
+      "id": 4368,
+      "title": "Vacuum the car",
+      "isFav": false
+    }
+  ]
 }

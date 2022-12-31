@@ -33,16 +33,65 @@ export const useTaskStore = defineStore("taskStore", {
     },
 
     async addTask(task: Task) {
+      /// change data on the server
+      const res = await fetch("http://localhost:3000/tasks/", {
+        method: "POST",
+        body: JSON.stringify(task),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!res.ok) {
+        console.log(res.statusText);
+        return;
+      }
+
+      /// update the store
       this.tasks.push(task);
     },
 
-    deleteTask(id: number) {
+    async deleteTask(id: number) {
+      /// try finding that Task in the store
+      const task: Task | undefined = this.tasks.find((t) => t.id === id);
+      if (!task) {
+        console.log(`Error: couldn't find task with id:${id} inside the store`);
+        return;
+      }
+
+      /// change data on the server
+      const res = await fetch("http://localhost:3000/tasks/" + id, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        console.log(res.statusText);
+        return;
+      }
+
+      /// update the store
       this.tasks = this.tasks.filter((t) => t.id !== id);
     },
 
-    toggleFavTask(id: number) {
+    async toggleFavTask(id: number) {
+      /// try finding that Task in the store
       const task: Task | undefined = this.tasks.find((t) => t.id === id);
-      if (task) task.isFav = !task.isFav;
+      if (!task) {
+        console.log(`Error: couldn't find task with id:${id} inside the store`);
+        return;
+      }
+
+      /// change data on the server
+      const isFavTemp = !task.isFav;
+      const res = await fetch("http://localhost:3000/tasks/" + id, {
+        method: "PATCH",
+        body: JSON.stringify({ isFav: isFavTemp }),
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!res.ok) {
+        console.log(res.statusText);
+        return;
+      }
+
+      /// update the store
+      task.isFav = !task.isFav;
     },
   },
 });
