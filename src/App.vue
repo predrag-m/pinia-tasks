@@ -8,6 +8,8 @@ import type { TaskFilter } from "@/types/TaskFilter";
 /// 'useTaskStore()' returns us the 'store' property that we are placing inside the 'taskStore' constant.
 const taskStore = useTaskStore();
 const taskFilter = ref<TaskFilter>("all");
+
+taskStore.getTasks();
 </script>
 
 <template>
@@ -36,20 +38,24 @@ const taskFilter = ref<TaskFilter>("all");
         Favorite Tasks
       </button>
     </nav>
+    <!-- loading -->
+    <div v-if="taskStore.isLoading" class="loading">Loading tasks...</div>
     <!-- task list -->
-    <div v-if="taskFilter === 'all'" class="task-list">
-      <p>You have {{ taskStore.allTasksCount }} tasks left to do:</p>
-      <div v-for="task in taskStore.tasks" :key="task.id">
-        <task-details :task="task" />
+    <div v-else-if="taskStore.tasks">
+      <div v-if="taskFilter === 'all'" class="task-list">
+        <p>You have {{ taskStore.allTasksCount }} tasks left to do:</p>
+        <div v-for="task in taskStore.tasks" :key="task.id">
+          <task-details :task="task" />
+        </div>
       </div>
-    </div>
-    <div v-if="taskFilter === 'fav'" class="task-list">
-      <p>
-        You have {{ taskStore.favTasksCount }} favorite
-        {{ taskStore.favTasksCount === 1 ? "task" : "tasks" }} left to do:
-      </p>
-      <div v-for="task in taskStore.favTasks" :key="task.id">
-        <task-details :task="task" />
+      <div v-if="taskFilter === 'fav'" class="task-list">
+        <p>
+          You have {{ taskStore.favTasksCount }} favorite
+          {{ taskStore.favTasksCount === 1 ? "task" : "tasks" }} left to do:
+        </p>
+        <div v-for="task in taskStore.favTasks" :key="task.id">
+          <task-details :task="task" />
+        </div>
       </div>
     </div>
   </main>

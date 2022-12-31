@@ -1,0 +1,24 @@
+{
+    "tasks": [
+        {
+            "id": 1,
+            "isFav": false,
+            "title": "buy some milk"
+        },
+        {
+            "id": 2,
+            "isFav": false,
+            "title": "buy dog food"
+        },
+        {
+            "id": 3,
+            "isFav": true,
+            "title": "play Gloomhaven"
+        },
+        {
+            "id": 4,
+            "isFav": false,
+            "title": "do the dishes"
+        }
+    ]
+}

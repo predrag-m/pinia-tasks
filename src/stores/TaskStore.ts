@@ -3,16 +3,14 @@ import type { Task } from "@/types/Task";
 
 type State = {
   tasks: Task[];
+  isLoading: boolean;
 };
 
 export const useTaskStore = defineStore("taskStore", {
   state: (): State => {
     return {
-      tasks: [
-        { id: 1, title: "buy some milk", isFav: false },
-        { id: 2, title: "buy dog food", isFav: false },
-        { id: 3, title: "play Gloomhaven", isFav: true },
-      ],
+      tasks: [],
+      isLoading: false,
     };
   },
 
@@ -27,6 +25,16 @@ export const useTaskStore = defineStore("taskStore", {
   },
 
   actions: {
+    async getTasks() {
+      this.isLoading = true;
+      setTimeout(async () => {
+        const res = await fetch("http://localhost:3000/tasks/");
+        const data: Task[] = await res.json();
+
+        this.tasks = data;
+        this.isLoading = false;
+      }, 1500);
+    },
     addTask(task: Task) {
       this.tasks.push(task);
     },
