@@ -1,7 +1,8 @@
 import { useTaskStore } from "@/stores/TaskStore";
-import { ref } from "vue";
+import type { Task } from "@/types/Task";
+import { ErrorMsg } from "@/types/ErrorMsg";
 
-export const fetchTasks = async () => {
+export const getTasks = async () => {
   const taskStore = useTaskStore();
 
   taskStore.isLoading = true;
@@ -10,10 +11,11 @@ export const fetchTasks = async () => {
   setTimeout(async () => {
     try {
       let res = await fetch("http://localhost:3000/tasks/");
-      if (!res.ok) throw new Error("Error: no data available");
+      if (!res.ok) throw new Error(ErrorMsg.noData);
       const data: Task[] = await res.json();
       taskStore.tasks = data;
     } catch (e: any) {
+      console.log(`ERROR: ${e.message}`);
       taskStore.errorMsg = e.message;
     } finally {
       taskStore.isLoading = false;

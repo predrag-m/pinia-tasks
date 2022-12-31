@@ -4,12 +4,17 @@ import TaskDetails from "@/components/TaskDetails.vue";
 import TaskForm from "@/components/TaskForm.vue";
 import { ref } from "vue";
 import type { TaskFilter } from "@/types/TaskFilter";
+import { storeToRefs } from "pinia";
 
 /// 'useTaskStore()' returns us the 'store' property that we are placing inside the 'taskStore' constant.
 const taskStore = useTaskStore();
 const taskFilter = ref<TaskFilter>("all");
 
-taskStore.getTasks();
+/// storeToRefs - only state and getters (actions cannot)
+const { tasks, isLoading, errorMsg, favTasks, favTasksCount, allTasksCount } =
+  storeToRefs(taskStore);
+
+taskStore.fetchTasks();
 </script>
 
 <template>
@@ -39,29 +44,32 @@ taskStore.getTasks();
       </button>
     </nav>
     <!-- loading -->
-    <div v-if="taskStore.isLoading" class="loading">Loading tasks...</div>
+    <div v-if="isLoading" class="loading">Loading tasks...</div>
     <!-- error message -->
-    <div v-else-if="taskStore.errorMsg" class="error-message">
-      {{ taskStore.errorMsg }}
+    <div v-else-if="errorMsg" class="error-message">
+      {{ errorMsg }}
     </div>
     <!-- task list -->
     <div v-else>
       <div v-if="taskFilter === 'all'" class="task-list">
-        <p>You have {{ taskStore.allTasksCount }} tasks left to do:</p>
-        <div v-for="task in taskStore.tasks" :key="task.id">
+        <p>You have {{ allTasksCount }} tasks left to do:</p>
+        <div v-for="task in tasks" :key="task.id">
           <task-details :task="task" />
         </div>
       </div>
       <div v-if="taskFilter === 'fav'" class="task-list">
         <p>
-          You have {{ taskStore.favTasksCount }} favorite
-          {{ taskStore.favTasksCount === 1 ? "task" : "tasks" }} left to do:
+          You have {{ favTasksCount }} favorite
+          {{ favTasksCount === 1 ? "task" : "tasks" }} left to do:
         </p>
-        <div v-for="task in taskStore.favTasks" :key="task.id">
+        <div v-for="task in favTasks" :key="task.id">
           <task-details :task="task" />
         </div>
       </div>
     </div>
+
+    <!-- reset the taskStore.state -->
+    <button @click="taskStore.$reset">Reset</button>
   </main>
 </template>
 

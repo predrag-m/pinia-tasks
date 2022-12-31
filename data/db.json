@@ -31,7 +31,12 @@
       "title": "play with Cezar"
     },
     {
-      "id": 4368,
+      "id": 7,
+      "isFav": true,
+      "title": "eat a pineapple"
+    },
+    {
+      "id": 8,
       "title": "Vacuum the car",
       "isFav": false
     }

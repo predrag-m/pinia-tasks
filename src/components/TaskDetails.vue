@@ -18,7 +18,7 @@ const taskStore = useTaskStore();
     <!-- Inside index.html we created a linked to material icons -->
     <!-- Icon for trash can is 'delete' -->
     <div class="icons">
-      <i @click="taskStore.deleteTask(task.id)" class="material-icons"
+      <i @click="taskStore.removeTask(task.id)" class="material-icons"
         >delete</i
       >
       <i

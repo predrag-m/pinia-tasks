@@ -1,6 +1,9 @@
 import { defineStore } from "pinia";
 import type { Task } from "@/types/Task";
-import { fetchTasks } from "@/composables/fetchTasks";
+import { getTasks } from "@/composables/getTasks";
+import { postTask } from "@/composables/postTask";
+import { deleteTask } from "@/composables/deleteTask";
+import { patchIsFavTask } from "@/composables/patchIsFavTask";
 
 type State = {
   tasks: Task[];
@@ -28,69 +31,23 @@ export const useTaskStore = defineStore("taskStore", {
   },
 
   actions: {
-    getTasks() {
-      fetchTasks();
+    fetchTasks: () => getTasks(),
+
+    async addTask(newTask: Task) {
+      const addedTask: Task | null = await postTask(newTask);
+      if (!addedTask) return;
+      this.tasks.push(addedTask);
     },
 
-    async addTask(task: Task) {
-      /// change data on the server
-      const res = await fetch("http://localhost:3000/tasks/", {
-        method: "POST",
-        body: JSON.stringify(task),
-        headers: { "Content-Type": "application/json" },
-      });
-
-      if (!res.ok) {
-        console.log(res.statusText);
-        return;
-      }
-
-      /// update the store
-      this.tasks.push(task);
-    },
-
-    async deleteTask(id: number) {
-      /// try finding that Task in the store
-      const task: Task | undefined = this.tasks.find((t) => t.id === id);
-      if (!task) {
-        console.log(`Error: couldn't find task with id:${id} inside the store`);
-        return;
-      }
-
-      /// change data on the server
-      const res = await fetch("http://localhost:3000/tasks/" + id, {
-        method: "DELETE",
-      });
-      if (!res.ok) {
-        console.log(res.statusText);
-        return;
-      }
-
-      /// update the store
+    async removeTask(id: number) {
+      const task: Task | null = await deleteTask(id);
+      if (!task) return;
       this.tasks = this.tasks.filter((t) => t.id !== id);
     },
 
     async toggleFavTask(id: number) {
-      /// try finding that Task in the store
-      const task: Task | undefined = this.tasks.find((t) => t.id === id);
-      if (!task) {
-        console.log(`Error: couldn't find task with id:${id} inside the store`);
-        return;
-      }
-
-      /// change data on the server
-      const isFavTemp = !task.isFav;
-      const res = await fetch("http://localhost:3000/tasks/" + id, {
-        method: "PATCH",
-        body: JSON.stringify({ isFav: isFavTemp }),
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!res.ok) {
-        console.log(res.statusText);
-        return;
-      }
-
-      /// update the store
+      const task: Task | null = await patchIsFavTask(id);
+      if (!task) return;
       task.isFav = !task.isFav;
     },
   },
