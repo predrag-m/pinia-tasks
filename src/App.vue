@@ -40,8 +40,12 @@ taskStore.getTasks();
     </nav>
     <!-- loading -->
     <div v-if="taskStore.isLoading" class="loading">Loading tasks...</div>
+    <!-- error message -->
+    <div v-else-if="taskStore.errorMsg" class="error-message">
+      {{ taskStore.errorMsg }}
+    </div>
     <!-- task list -->
-    <div v-else-if="taskStore.tasks">
+    <div v-else>
       <div v-if="taskFilter === 'all'" class="task-list">
         <p>You have {{ taskStore.allTasksCount }} tasks left to do:</p>
         <div v-for="task in taskStore.tasks" :key="task.id">

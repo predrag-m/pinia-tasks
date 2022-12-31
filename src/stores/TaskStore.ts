@@ -1,9 +1,11 @@
 import { defineStore } from "pinia";
 import type { Task } from "@/types/Task";
+import { fetchTasks } from "@/composables/fetchTasks";
 
 type State = {
   tasks: Task[];
   isLoading: boolean;
+  errorMsg: null | string;
 };
 
 export const useTaskStore = defineStore("taskStore", {
@@ -11,6 +13,7 @@ export const useTaskStore = defineStore("taskStore", {
     return {
       tasks: [],
       isLoading: false,
+      errorMsg: null,
     };
   },
 
@@ -25,17 +28,11 @@ export const useTaskStore = defineStore("taskStore", {
   },
 
   actions: {
-    async getTasks() {
-      this.isLoading = true;
-      setTimeout(async () => {
-        const res = await fetch("http://localhost:3000/tasks/");
-        const data: Task[] = await res.json();
-
-        this.tasks = data;
-        this.isLoading = false;
-      }, 1500);
+    getTasks() {
+      fetchTasks();
     },
-    addTask(task: Task) {
+
+    async addTask(task: Task) {
       this.tasks.push(task);
     },
 

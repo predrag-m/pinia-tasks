@@ -45,6 +45,14 @@ header h1 {
     margin: 30px auto;
 }
 
+/* error message */
+.error-message {
+    max-width: 640px;
+    color: #3a3a3a;
+    text-align: center;
+    margin: 30px auto;
+}
+
 /* task list */
 .task-list {
     max-width: 640px;
