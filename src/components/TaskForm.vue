@@ -1,20 +1,21 @@
 <script setup lang="ts">
+import { useTasksStore } from "@/stores/TasksStore";
 import { ref } from "vue";
-import { useTaskStore } from "@/stores/TaskStore";
-import { Task } from "@/classes/Task";
+import { TaskModel } from "@/models/TaskModel";
 
-const taskStore = useTaskStore();
+const tasksStore = useTasksStore();
 const newTaskTitle = ref("");
+
 const handleSubmit = () => {
-  if (newTaskTitle.value.length > 0)
-    taskStore.addTask(new Task(newTaskTitle.value));
+  const newTask = new TaskModel(newTaskTitle.value);
+  tasksStore.addTask(newTask);
   newTaskTitle.value = "";
 };
 </script>
 
 <template>
   <form @submit.prevent="handleSubmit">
-    <input v-model="newTaskTitle" type="text" placeholder="I need to..." />
+    <input v-model="newTaskTitle" type="text" placeholder="I need to do..." />
     <button>Add</button>
   </form>
 </template>

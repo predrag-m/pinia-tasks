@@ -1,18 +1,18 @@
-import { ErrorMsg } from "@/types/ErrorMsg";
 import type { Task } from "@/types/Task";
+import { ErrorMsg } from "@/types/ErrorMsg";
+import { DataBase } from "@/types/DataBase";
 
-export const postTask = async (newTask: Task) => {
+export async function postTask(task: Task): Promise<boolean> {
   try {
-    const res = await fetch("http://localhost:3000/tasks/", {
-      method: "POST",
-      body: JSON.stringify(newTask),
+    const res = await fetch(DataBase.tasksURL, {
+      method: "Post",
+      body: JSON.stringify(task),
       headers: { "Content-Type": "application/json" },
     });
     if (!res.ok) throw new Error(ErrorMsg.postTask);
-
-    return newTask;
+    return true;
   } catch (e: any) {
-    console.log(`ERROR: ${e.message}`);
-    return null;
+    console.log(e.message);
+    return false;
   }
-};
+}

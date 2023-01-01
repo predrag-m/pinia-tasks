@@ -1,20 +1,16 @@
 <script setup lang="ts">
-import { useTaskStore } from "./stores/TaskStore";
-import TaskDetails from "@/components/TaskDetails.vue";
-import TaskForm from "@/components/TaskForm.vue";
+import { storeToRefs } from "pinia";
+import { useTasksStore } from "@/stores/TasksStore";
 import { ref } from "vue";
 import type { TaskFilter } from "@/types/TaskFilter";
-import { storeToRefs } from "pinia";
+import TaskForm from "@/components/TaskForm.vue";
+import TaskList from "@/components/TaskList.vue";
 
-/// 'useTaskStore()' returns us the 'store' property that we are placing inside the 'taskStore' constant.
-const taskStore = useTaskStore();
 const taskFilter = ref<TaskFilter>("all");
+const tasksStore = useTasksStore();
+const { isLoading, errorMsg } = storeToRefs(tasksStore);
 
-/// storeToRefs - only state and getters (actions cannot)
-const { tasks, isLoading, errorMsg, favTasks, favTasksCount, allTasksCount } =
-  storeToRefs(taskStore);
-
-taskStore.fetchTasks();
+tasksStore.fetchTasks();
 </script>
 
 <template>
@@ -32,49 +28,26 @@ taskStore.fetchTasks();
     <nav class="filter">
       <button
         @click="taskFilter = 'all'"
-        :class="{ gray: taskFilter === 'all' }"
+        :class="{ active: taskFilter === 'all' }"
       >
         All Tasks
       </button>
       <button
         @click="taskFilter = 'fav'"
-        :class="{ gray: taskFilter === 'fav' }"
+        :class="{ active: taskFilter === 'fav' }"
       >
         Favorite Tasks
       </button>
     </nav>
     <!-- loading -->
-    <div v-if="isLoading" class="loading">Loading tasks...</div>
+    <div v-if="isLoading" class="loading">Loading...</div>
     <!-- error message -->
-    <div v-else-if="errorMsg" class="error-message">
-      {{ errorMsg }}
-    </div>
+    <div v-else-if="errorMsg" class="error-message">{{ errorMsg }}</div>
     <!-- task list -->
     <div v-else>
-      <div v-if="taskFilter === 'all'" class="task-list">
-        <p>You have {{ allTasksCount }} tasks left to do:</p>
-        <div v-for="task in tasks" :key="task.id">
-          <task-details :task="task" />
-        </div>
-      </div>
-      <div v-if="taskFilter === 'fav'" class="task-list">
-        <p>
-          You have {{ favTasksCount }} favorite
-          {{ favTasksCount === 1 ? "task" : "tasks" }} left to do:
-        </p>
-        <div v-for="task in favTasks" :key="task.id">
-          <task-details :task="task" />
-        </div>
-      </div>
+      <task-list :taskFilter="taskFilter" />
     </div>
-
-    <!-- reset the taskStore.state -->
-    <button @click="taskStore.$reset">Reset</button>
   </main>
 </template>
 
-<style scoped>
-.gray {
-  background-color: #e4e4e4;
-}
-</style>
+<style scoped></style>

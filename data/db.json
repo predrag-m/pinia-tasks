@@ -32,12 +32,22 @@
     },
     {
       "id": 7,
-      "isFav": true,
+      "isFav": false,
       "title": "eat a pineapple"
     },
     {
       "id": 8,
       "title": "Vacuum the car",
+      "isFav": true
+    },
+    {
+      "id": 4615,
+      "title": "asd",
+      "isFav": false
+    },
+    {
+      "id": 11584,
+      "title": "Fix the roof",
       "isFav": false
     }
   ]

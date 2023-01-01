@@ -96,6 +96,10 @@ header h1 {
     text-align: right;
 }
 
+.filter .active {
+    background-color: #ddd;
+}
+
 .filter button {
     display: inline-block;
     margin-left: 10px;

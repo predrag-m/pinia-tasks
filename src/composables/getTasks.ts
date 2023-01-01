@@ -1,24 +1,24 @@
-import { useTaskStore } from "@/stores/TaskStore";
+import { useTasksStore } from "@/stores/TasksStore";
 import type { Task } from "@/types/Task";
 import { ErrorMsg } from "@/types/ErrorMsg";
+import { DataBase } from "@/types/DataBase";
 
 export const getTasks = async () => {
-  const taskStore = useTaskStore();
+  const tasksStore = useTasksStore();
+  tasksStore.isLoading = true;
+  tasksStore.errorMsg = null;
 
-  taskStore.isLoading = true;
-  taskStore.errorMsg = null;
-  // setTimeout is here just for demonstration
   setTimeout(async () => {
     try {
-      let res = await fetch("http://localhost:3000/tasks/");
-      if (!res.ok) throw new Error(ErrorMsg.noData);
+      const res = await fetch(DataBase.tasksURL);
+      if (!res.ok) throw new Error(ErrorMsg.getTasks);
       const data: Task[] = await res.json();
-      taskStore.tasks = data;
+      tasksStore.tasks = data;
     } catch (e: any) {
-      console.log(`ERROR: ${e.message}`);
-      taskStore.errorMsg = e.message;
+      tasksStore.errorMsg = e.message;
+      console.log(e.message);
     } finally {
-      taskStore.isLoading = false;
+      tasksStore.isLoading = false;
     }
   }, 1500);
 };
